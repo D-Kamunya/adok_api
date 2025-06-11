@@ -1,0 +1,7 @@
+Django==5.2.2
+django-autoslug==1.9.9
+django-cors-headers==4.7.0
+django-filter==25.1
+djangorestframework==3.16.0
+python-dotenv==1.1.0
+setuptools==80.9.0

@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 from os import getenv, path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
+BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 
 APPS_DIR = BASE_DIR / "core_apps"
 
@@ -11,17 +11,6 @@ local_env_file = path.join(BASE_DIR,".envs",".env.local")
 
 if path.isfile(local_env_file):
     load_dotenv(local_env_file)
-
-SECRET_KEY = getenv("SECRET_KEY")
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = getenv("DEBUG")
-
-SITE_NAME = getenv("SITE_NAME")
-
-ALLOWED_HOSTS = getenv("ALLOWED_HOSTS").split(" ")
-
-ADMIN_URL = getenv("ADMIN_URL")
 
 # Application definition
 
@@ -75,21 +64,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "config.wsgi.application"
 
-
-# Database
-# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-
-DATABASES = {
-    "default": {
-        "ENGINE": getenv("POSTGRES_ENGINE"),
-        "NAME": getenv("POSTGRES_DB"),
-        "USER": getenv("POSTGRES_USER"),
-        "PASSWORD": getenv("POSTGRES_PASSWORD"),
-        "HOST": getenv("PG_HOST"),
-        "PORT": getenv("PG_PORT"),
-    }
-}
-
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
@@ -119,7 +93,6 @@ TIME_ZONE = "Africa/Nairobi"
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
