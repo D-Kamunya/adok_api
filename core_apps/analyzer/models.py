@@ -6,8 +6,8 @@ class UploadedWorkbook(TimeStampedModel):
     Model to track uploaded Excel workbooks for attendance data.
     """
     file = models.FileField(upload_to='uploads/workbooks/')
-    file_name = models.CharField(max_length=255)
-    sheet_date = models.DateField(help_text="Sunday date parsed from filename or sheet name")
+    file_name = models.CharField(max_length=255,unique=True)
+    sheet_date = models.DateField(help_text="Sunday date parsed from filename or sheet name",null=True)
     processed = models.BooleanField(default=False)
     error_message = models.TextField(blank=True)
 
