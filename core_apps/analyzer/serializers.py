@@ -1,7 +1,10 @@
 from rest_framework import serializers
 
 class WorkbookUploadSerializer(serializers.Serializer):
-    file = serializers.FileField()
+    files = serializers.ListField(
+        child=serializers.FileField(allow_empty_file=False),
+        allow_empty=False
+    )
 
     def validate_file(self, value):
         name = value.name.lower()
