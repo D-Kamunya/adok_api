@@ -30,6 +30,7 @@ SITE_ID = 1
 THIRD_PARTY_APPS = [
     "rest_framework",
     "django_filters",
+    "drf_spectacular"
 ]
 
 LOCAL_APPS = ["core_apps.common","core_apps.attendance","core_apps.analyzer"]
@@ -105,6 +106,21 @@ STATIC_ROOT=str(BASE_DIR/"staticfiles")
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+REST_FRAMEWORK = {
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "ACK Dioces of Kirinyaga Data Analyzer API",
+    "DESCRIPTION": "An API built to analyze diocesan data",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+    "LICENSE": {
+        "name": "MIT License",
+        "url": "https://opensource.org/license/mit",
+    },
+}
 
 LOGGING_CONFIG = None
 
