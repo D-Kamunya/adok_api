@@ -1,0 +1,39 @@
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app-content {
+  display: flex;
+  flex: 1;
+}
+
+.main-content {
+  flex: 1;
+  padding: 20px;
+  background-color: #f9fafc;
+}
+
+/* Make the toast message content scrollable */
+.toast-body-overflow {
+  max-height: 6em;       /* limit height to ~3–4 lines */
+  overflow-y: auto;      /* scroll if content exceeds */
+  white-space: pre-wrap; /* preserve bullets and line breaks */
+  padding-right: 0.25em; /* space for scrollbar */
+}
+
+.Toastify__toast {
+  padding: 0.5em 1em;
+}
+
+
+@media (max-width: 768px) {
+  .app-content {
+    flex-direction: column;
+  }
+  
+  .main-content {
+    padding: 15px;
+  }
+}

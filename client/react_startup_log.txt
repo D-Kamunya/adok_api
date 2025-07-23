@@ -1,0 +1,165 @@
+
+> ack-analyzer-ui@0.1.0 start
+> react-scripts start
+
+(node:39212) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:39212) [DEP_WEBPACK_DEV_SERVER_ON_BEFORE_SETUP_MIDDLEWARE] DeprecationWarning: 'onBeforeSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+Starting the development server...
+
+Compiled successfully!
+
+You can now view ack-analyzer-ui in the browser.
+
+  Local:            http://localhost:3000
+  On Your Network:  http://10.42.0.183:3000
+
+Note that the development build is not optimized.
+To create a production build, use npm run build.
+
+webpack compiled [1m[32msuccessfully[39m[22m
+
+> ack-analyzer-ui@0.1.0 start
+> react-scripts start
+
+(node:2472) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:2472) [DEP_WEBPACK_DEV_SERVER_ON_BEFORE_SETUP_MIDDLEWARE] DeprecationWarning: 'onBeforeSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+Starting the development server...
+
+Compiled successfully!
+
+You can now view ack-analyzer-ui in the browser.
+
+  Local:            http://localhost:3000
+  On Your Network:  http://10.42.0.183:3000
+
+Note that the development build is not optimized.
+To create a production build, use npm run build.
+
+webpack compiled [1m[32msuccessfully[39m[22m
+
+> ack-analyzer-ui@0.1.0 start
+> react-scripts start
+
+(node:8316) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:8316) [DEP_WEBPACK_DEV_SERVER_ON_BEFORE_SETUP_MIDDLEWARE] DeprecationWarning: 'onBeforeSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+Starting the development server...
+
+Compiled successfully!
+
+You can now view ack-analyzer-ui in the browser.
+
+  Local:            http://localhost:3000
+  On Your Network:  http://192.168.67.184:3000
+
+Note that the development build is not optimized.
+To create a production build, use npm run build.
+
+webpack compiled [1m[32msuccessfully[39m[22m
+
+> ack-analyzer-ui@0.1.0 start
+> react-scripts start
+
+(node:8768) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:8768) [DEP_WEBPACK_DEV_SERVER_ON_BEFORE_SETUP_MIDDLEWARE] DeprecationWarning: 'onBeforeSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+Starting the development server...
+
+Compiled successfully!
+
+You can now view ack-analyzer-ui in the browser.
+
+  Local:            http://localhost:3000
+  On Your Network:  http://192.168.67.184:3000
+
+Note that the development build is not optimized.
+To create a production build, use npm run build.
+
+webpack compiled [1m[32msuccessfully[39m[22m
+
+> ack-analyzer-ui@0.1.0 start
+> react-scripts start
+
+(node:8252) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:8252) [DEP_WEBPACK_DEV_SERVER_ON_BEFORE_SETUP_MIDDLEWARE] DeprecationWarning: 'onBeforeSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+Starting the development server...
+
+Compiled successfully!
+
+You can now view ack-analyzer-ui in the browser.
+
+  Local:            http://localhost:3000
+  On Your Network:  http://192.168.67.184:3000
+
+Note that the development build is not optimized.
+To create a production build, use npm run build.
+
+webpack compiled [1m[32msuccessfully[39m[22m
+
+> ack-analyzer-ui@0.1.0 start
+> react-scripts start
+
+Something is already running on port 3000.
+
+> ack-analyzer-ui@0.1.0 start
+> react-scripts start
+
+(node:24984) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:24984) [DEP_WEBPACK_DEV_SERVER_ON_BEFORE_SETUP_MIDDLEWARE] DeprecationWarning: 'onBeforeSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+Starting the development server...
+
+Compiled successfully!
+
+You can now view ack-analyzer-ui in the browser.
+
+  Local:            http://localhost:3000
+  On Your Network:  http://192.168.88.83:3000
+
+Note that the development build is not optimized.
+To create a production build, use npm run build.
+
+webpack compiled [1m[32msuccessfully[39m[22m
+
+> ack-analyzer-ui@0.1.0 start
+> react-scripts start
+
+(node:8328) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:8328) [DEP_WEBPACK_DEV_SERVER_ON_BEFORE_SETUP_MIDDLEWARE] DeprecationWarning: 'onBeforeSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+Starting the development server...
+
+Compiled successfully!
+
+You can now view ack-analyzer-ui in the browser.
+
+  Local:            http://localhost:3000
+  On Your Network:  http://192.168.137.69:3000
+
+Note that the development build is not optimized.
+To create a production build, use npm run build.
+
+webpack compiled [1m[32msuccessfully[39m[22m
+
+> ack-analyzer-ui@0.1.0 start
+> react-scripts start
+
+(node:13936) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:13936) [DEP_WEBPACK_DEV_SERVER_ON_BEFORE_SETUP_MIDDLEWARE] DeprecationWarning: 'onBeforeSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+Starting the development server...
+
+Compiled successfully!
+
+You can now view ack-analyzer-ui in the browser.
+
+  Local:            http://localhost:3000
+  On Your Network:  http://192.168.137.88:3000
+
+Note that the development build is not optimized.
+To create a production build, use npm run build.
+
+webpack compiled [1m[32msuccessfully[39m[22m

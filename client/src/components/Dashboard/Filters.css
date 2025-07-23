@@ -1,0 +1,62 @@
+.filters-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 30px;
+  padding: 15px;
+  background: #f5f7fa;
+  border-radius: 8px;
+}
+
+.filter-group {
+  flex: 1;
+  min-width: 200px;
+}
+
+.filter-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #555;
+}
+
+.filter-group select,
+.filter-group input[type="date"] {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.date-range {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.date-range span {
+  color: #666;
+}
+
+.filter-loading {
+  padding: 20px;
+  text-align: center;
+  color: #666;
+}
+
+@media (max-width: 600px) {
+  .filters-container {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .date-range {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .date-range span {
+    display: none;
+  }
+}

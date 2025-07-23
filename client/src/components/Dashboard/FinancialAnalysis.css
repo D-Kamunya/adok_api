@@ -1,0 +1,28 @@
+.financial-container {
+  width: 100%;
+}
+
+.financial-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.financial-item {
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.financial-item h3 {
+  margin-top: 0;
+  color: #444;
+  font-size: 1.1rem;
+}
+
+@media (max-width: 900px) {
+  .financial-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,37 @@
+.hierarchy-chart-container {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.hierarchy-chart-container h2 {
+  margin-top: 0;
+  color: #444;
+  font-size: 1.4rem;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+}
+
+.chart-wrapper {
+  margin-top: 20px;
+  height: 400px;
+}
+
+.custom-tooltip {
+  background: white;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.custom-tooltip .label {
+  font-weight: bold;
+  margin: 0 0 5px 0;
+}
+
+.custom-tooltip .value {
+  margin: 0;
+  color: #666;
+}
