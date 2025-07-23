@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 from dotenv import load_dotenv
 from os import getenv, path
@@ -8,10 +9,17 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 
 APPS_DIR = BASE_DIR / "core_apps"
 
-local_env_file = path.join(BASE_DIR,".envs",".env.local")
+if os.getenv("RUNNING_IN_DOCKER") != "true":
+    # Path to the separated env files
+    django_env = path.join(BASE_DIR, ".envs", ".local", ".django")
+    postgres_env = path.join(BASE_DIR, ".envs", ".local", ".postgres")
 
-if path.isfile(local_env_file):
-    load_dotenv(local_env_file)
+    # Load both
+    if path.isfile(django_env):
+        load_dotenv(dotenv_path=django_env)
+
+    if path.isfile(postgres_env):
+        load_dotenv(dotenv_path=postgres_env)
 
 # Application definition
 
@@ -124,8 +132,15 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = "/static/"
+STATIC_URL = "/staticfiles/"
 STATIC_ROOT=str(BASE_DIR/"staticfiles")
+STATICFILES_DIR = []
+
+MEDIA_URL = "/mediafiles/"
+MEDIA_ROOT = str(BASE_DIR / "mediafiles")
+
+CORS_URLS_REGEX = r"^api/.*$"
+CSRF_TRUSTED_ORIGINS = ["http://localhost:8000"]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field

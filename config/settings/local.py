@@ -1,12 +1,4 @@
-from os import getenv,path
-from dotenv import load_dotenv
 from .base import * #noqa
-from .base import BASE_DIR
-
-local_env_file = path.join(BASE_DIR,".envs",".env.local")
-
-if path.isfile(local_env_file):
-    load_dotenv(local_env_file)
 
 SECRET_KEY = getenv("SECRET_KEY")
 
@@ -28,7 +20,7 @@ DATABASES = {
         "NAME": getenv("POSTGRES_DB"),
         "USER": getenv("POSTGRES_USER"),
         "PASSWORD": getenv("POSTGRES_PASSWORD"),
-        "HOST": getenv("PG_HOST"),
-        "PORT": getenv("PG_PORT"),
+        "HOST": getenv("POSTGRES_HOST"),
+        "PORT": getenv("POSTGRES_PORT"),
     }
 }

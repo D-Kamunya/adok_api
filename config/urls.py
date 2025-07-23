@@ -1,3 +1,5 @@
+import os
+from django.conf.urls.static import static
 from django.conf import settings
 from django.contrib import admin
 from django.urls import path,include
@@ -22,6 +24,11 @@ urlpatterns = [
     ),
     path('api/v1/analyzer/', include('core_apps.analyzer.urls')), 
 ]
+
+if os.environ.get("RUNNING_IN_DOCKER") == "true":
+    pass
+else:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 admin.site.site_header = "ADOK Data Analyzer Admin"
 admin.site.site_title = "ADOK Data Analyzer Admin Portal"

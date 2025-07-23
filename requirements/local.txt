@@ -1,8 +1,8 @@
 -r base.txt
 
-psycopg2-binary==2.9.10
+psycopg2-binary
 
-flake8==7.2.0
-black==25.1.0
-isort==6.0.1
-watchfiles==0.16.1
+flake8
+black
+isort
+watchfiles
