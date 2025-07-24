@@ -1,9 +1,9 @@
 ARG PYTHON_VERSION=3.8-bullseye
 
-FROM python:${PYTHON_VERSION} as python
+FROM python:${PYTHON_VERSION} AS python
 
 
-FROM python as python-build-stage
+FROM python AS python-build-stage
 ARG BUILD_ENVIRONMENT=local
 
 RUN apt-get update && apt-get install --no-install-recommends -y \
@@ -16,7 +16,7 @@ RUN pip wheel --wheel-dir /usr/src/app/wheels \
   -r ${BUILD_ENVIRONMENT}.txt
 
 
-FROM python as python-run-stage
+FROM python AS python-run-stage
 ARG BUILD_ENVIRONMENT=local
 
 ARG APP_HOME=/app

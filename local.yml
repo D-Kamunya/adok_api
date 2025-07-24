@@ -20,6 +20,21 @@ services:
       networks:
          - arch-api
 
+   client:
+      build:   
+         context: ./client
+         dockerfile: ./docker/local/Dockerfile  
+      restart: on-failure
+      volumes:
+         - ./client:/app:z
+         - /app/node_modules
+      expose:
+         - "3000"
+      env_file:
+         - ./client/.env
+      networks:
+         - arch-api  
+
    postgres:
       build:
          context: .
