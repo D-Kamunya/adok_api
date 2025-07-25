@@ -55,6 +55,7 @@ services:
       volumes:
          - static_volume:/app/staticfiles
          - media_volume:/app/mediafiles
+         - logs_store:/var/log/nginx
       build:
          context: ./docker/local/nginx
          dockerfile: Dockerfile
@@ -71,4 +72,4 @@ volumes:
    static_volume:
    media_volume:
    local_postgres_data: {}
-
+   logs_store:
