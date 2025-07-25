@@ -1,9 +1,8 @@
-ARG PYTHON_VERSION=3.8-bullseye
+FROM docker.io/python:3.12.2-slim-bookworm AS python
 
-FROM python:${PYTHON_VERSION} AS python
-
-
+# Stage 1: Build our dependency wheels
 FROM python AS python-build-stage
+
 ARG BUILD_ENVIRONMENT=local
 
 RUN apt-get update && apt-get install --no-install-recommends -y \
@@ -13,42 +12,46 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
 COPY ./requirements .
 
 RUN pip wheel --wheel-dir /usr/src/app/wheels \
-  -r ${BUILD_ENVIRONMENT}.txt
+    -r ${BUILD_ENVIRONMENT}.txt
 
-
+# Stage 2 : Run Stage
 FROM python AS python-run-stage
+
 ARG BUILD_ENVIRONMENT=local
 
 ARG APP_HOME=/app
 
-ENV PYTHONDONTWRITEBYTECODE 1
-
-ENV PYTHONUNBUFFERED 1
-
-ENV BUILD_ENV ${BUILD_ENVIRONMENT}
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    BUILD_ENV=${BUILD_ENVIRONMENT}
 
 WORKDIR ${APP_HOME}
 
 RUN apt-get update && apt-get install --no-install-recommends -y \
-  libpq-dev \
-  gettext \
-  && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
-  && rm -rf /var/lib/apt/lists/*
+    sudo git bash-completion nano ssh \
+    libpq-dev gettext \
+    && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
+    && rm -rf /var/lib/apt/lists/*
 
+RUN addgroup --system django && \
+    adduser --system --ingroup django django && \
+    mkdir -p ${APP_HOME}/staticfiles && \
+    chown django:django ${APP_HOME}/staticfiles && \
+    chmod 775 ${APP_HOME}/staticfiles
 
 COPY --from=python-build-stage /usr/src/app/wheels /wheels/
 
 RUN pip install --no-cache-dir --no-index --find-links=/wheels/ /wheels/* \
-  && rm -rf /wheels/
+    && rm -rf /wheels/
 
-COPY ./docker/local/django/entrypoint /entrypoint
-RUN sed -i 's/\r$//g' /entrypoint
-RUN chmod +x /entrypoint
+COPY --chown=django:django ./docker/local/django/entrypoint /entrypoint
+COPY --chown=django:django ./docker/local/django/start /start
 
-COPY ./docker/local/django/start /start
-RUN sed -i 's/\r$//g' /start
-RUN chmod +x /start
+RUN sed -i 's/\r$//g' /entrypoint /start && \
+    chmod +x /entrypoint /start
 
-COPY . ${APP_HOME}
+COPY --chown=django:django . ${APP_HOME}
 
-ENTRYPOINT [ "/entrypoint" ]
+USER django
+
+ENTRYPOINT ["/entrypoint"]
