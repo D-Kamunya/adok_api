@@ -41,6 +41,7 @@ services:
          dockerfile: ./docker/local/postgres/Dockerfile
       volumes:
          - local_postgres_data:/var/lib/postgresql/data
+         - ./backups:/backups
       env_file:
          - ./.envs/.local/.postgres
       environment:
