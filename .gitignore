@@ -4,6 +4,7 @@
 .DS_Store
 staticfiles
 mediafiles
+learn-terraform-oci/
 .envs/*
 !.envs/.env.example
 # Byte-compiled / optimized / DLL files
