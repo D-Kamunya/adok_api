@@ -1,0 +1,70 @@
+services:
+    api: &api
+        build:
+            context: .
+            dockerfile: ./docker/production/django/Dockerfile
+        volumes:
+            - static_volume:/app/staticfiles
+            - media_volume:/app/mediafiles
+            - app_logs:/app/logs
+        expose:
+            - "8000"
+        env_file:
+         - ./.envs/.production/.django
+         - ./.envs/.production/.postgres
+        depends_on:
+            - postgres
+        command: /start
+        networks:
+            - arch_prod_nw
+
+    postgres:
+        build:
+            context: .
+            dockerfile: ./docker/production/postgres/Dockerfile
+        ports:
+            - "5433:5432"
+        volumes:
+            - production_postgres_data:/var/lib/postgresql/data
+            - ./backups:/backups
+        env_file:
+            - ./.envs/.production/.django
+            - ./.envs/.production/.postgres
+        networks:
+            - arch_prod_nw
+    
+    nginx:
+        build:
+            context: .
+            dockerfile: ./docker/local/nginx/Dockerfile
+        restart: always
+        ports:
+            - "8080:80"
+            # - "443:443"
+        env_file:
+            - ./client/.env
+        volumes:
+            # - ./docker/production/nginx/default.conf:/etc/nginx/nginx.conf:ro
+            # - /etc/letsencrypt:/etc/letsencrypt:ro
+            - static_volume:/app/staticfiles
+            - media_volume:/app/mediafiles
+            - logs_store:/var/log/nginx
+        depends_on:
+            - api
+        networks:
+            - arch_prod_nw
+
+networks:
+    arch_prod_nw:
+        driver: bridge
+
+volumes:
+    production_postgres_data:
+    static_volume:
+    media_volume:
+    app_logs:
+    logs_store:
+    
+    
+    
+    

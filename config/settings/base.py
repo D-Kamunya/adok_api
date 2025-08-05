@@ -9,17 +9,16 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 
 APPS_DIR = BASE_DIR / "core_apps"
 
-if os.getenv("RUNNING_IN_DOCKER") != "true":
-    # Path to the separated env files
-    django_env = path.join(BASE_DIR, ".envs", ".local", ".django")
-    postgres_env = path.join(BASE_DIR, ".envs", ".local", ".postgres")
+# Path to the separated env files
+django_env = path.join(BASE_DIR, ".envs", ".production", ".django")
+postgres_env = path.join(BASE_DIR, ".envs", ".production", ".postgres")
 
-    # Load both
-    if path.isfile(django_env):
-        load_dotenv(dotenv_path=django_env)
+# Load both
+if path.isfile(django_env):
+    load_dotenv(dotenv_path=django_env)
 
-    if path.isfile(postgres_env):
-        load_dotenv(dotenv_path=postgres_env)
+if path.isfile(postgres_env):
+    load_dotenv(dotenv_path=postgres_env)
 
 # Application definition
 
@@ -59,12 +58,6 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = "config.urls"
-
-# Configure CORS settings
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",  # Your React frontend origin
-    "http://127.0.0.1:3000",  # Alternative localhost
-]
 
 # Optional: If you need to allow credentials
 CORS_ALLOW_CREDENTIALS = True
@@ -140,8 +133,6 @@ MEDIA_URL = "/mediafiles/"
 MEDIA_ROOT = str(BASE_DIR / "mediafiles")
 
 CORS_URLS_REGEX = r"^api/.*$"
-CSRF_TRUSTED_ORIGINS = ["http://localhost:8000"]
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 

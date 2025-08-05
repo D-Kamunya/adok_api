@@ -24,7 +24,7 @@ FROM docker.io/nginx:1.27.0-alpine3.19-slim
 
 RUN rm /etc/nginx/conf.d/default.conf
 
-COPY ./docker/local/nginx/default.conf /etc/nginx/conf.d/default.conf
+COPY ./docker/production/nginx/default.conf /etc/nginx/conf.d/default.conf
 
 COPY --from=client-local-build /app/build /usr/share/nginx/html
 
