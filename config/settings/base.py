@@ -20,6 +20,9 @@ if path.isfile(django_env):
 if path.isfile(postgres_env):
     load_dotenv(dotenv_path=postgres_env)
 
+def str_to_bool(value):
+    return str(value).lower() in ['true', '1', 'yes']
+
 # Application definition
 
 DJANGO_APPS = [
