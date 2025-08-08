@@ -10,8 +10,8 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 APPS_DIR = BASE_DIR / "core_apps"
 
 # Path to the separated env files
-django_env = path.join(BASE_DIR, ".envs", ".production", ".django")
-postgres_env = path.join(BASE_DIR, ".envs", ".production", ".postgres")
+django_env = path.join(BASE_DIR, ".envs", ".local", ".django")
+postgres_env = path.join(BASE_DIR, ".envs", ".local", ".postgres")
 
 # Load both
 if path.isfile(django_env):
