@@ -20,6 +20,7 @@ rsync -avz ./project.tar root@$DIGITAL_OCEAN_IP_ADDRESS:/tmp/project.tar
 
 echo "Uploading env files..."
 rsync -avz .envs root@$DIGITAL_OCEAN_IP_ADDRESS:/tmp/.envs
+rsync -avz .client/.env root@$DIGITAL_OCEAN_IP_ADDRESS:/tmp/.envs/client.env
 # 🚀 Connect to server and deploy
 ssh -o StrictHostKeyChecking=no root@$DIGITAL_OCEAN_IP_ADDRESS <<'ENDSSH'
 
@@ -30,7 +31,7 @@ cleanup_remote(){
   echo "Cleaning up remote temp files..."
   rm -rf /tmp/project.tar
   rm -rf /app
-  mv -rf /tmp/.envs
+  rm -rf /tmp/.envs
 }
 trap cleanup_remote EXIT
 
@@ -38,7 +39,8 @@ TEMP_DIR=$(mktemp -d)
 echo "Extracting to $TEMP_DIR..."
 tar -xf /tmp/project.tar -C "$TEMP_DIR"
 
-mv /tmp/.envs "$TEMP_DIR/.envs"
+rsync -av --exclude='client.env' /tmp/.envs/ "$TEMP_DIR/.envs/"
+mv /tmp/.envs/client.env ./client/.env
 
 cd "$TEMP_DIR"
 
