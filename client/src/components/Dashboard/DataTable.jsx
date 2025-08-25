@@ -85,6 +85,8 @@ const DataTable = ({ filters }) => {
       totalDisabled: data.reduce((sum, item) => sum + (item.diff_abled || 0), 0),
       totalAttendance: data.reduce((sum, item) => sum + (item.total_attendance || 0), 0),
       totalCollected: data.reduce((sum, item) => sum + (item.total_collection || 0), 0),
+      totalBanked: data.reduce((sum, item) => sum + (item.banked || 0), 0),
+      totalUnBanked: data.reduce((sum, item) => sum + (item.unbanked || 0), 0),
       avgAttendance: data.reduce((sum, item) => sum + (item.total_attendance || 0), 0) / data.length,
       avgCollection: data.reduce((sum, item) => sum + (item.total_collection || 0), 0) / data.length
     };
@@ -174,17 +176,26 @@ const DataTable = ({ filters }) => {
                 )}
               </th>
               <th onClick={() => handleSort('total_attendance')}>
-                Total {sortConfig.key === 'total_attendance' && (
+                Total Attendance{sortConfig.key === 'total_attendance' && (
                   sortConfig.direction === 'ascending' ? '↑' : '↓'
                 )}
               </th>
-              <th onClick={() => handleSort('collected')}>
-                Collected {sortConfig.key === 'collected' && (
+              <th onClick={() => handleSort('total_collection')}>
+                Total Collected {sortConfig.key === 'total_collection' && (
                   sortConfig.direction === 'ascending' ? '↑' : '↓'
                 )}
               </th>
-              <th>Banked</th>
-              <th>Unbanked</th>
+              <th onClick={() => handleSort('banked')}>
+                Total Banked {sortConfig.key === 'banked' && (
+                  sortConfig.direction === 'ascending' ? '↑' : '↓'
+                )}
+              </th>
+              <th onClick={() => handleSort('unbanked')}>
+                Total Unbanked
+                {sortConfig.key === 'unbanked' && (
+                  sortConfig.direction === 'ascending' ? '↑' : '↓'
+                )}
+              </th>
               <th>Remarks</th>
             </tr>
           </thead>
@@ -257,6 +268,8 @@ const DataTable = ({ filters }) => {
                 <td>{summary.totalDisabled}</td>
                 <td>{summary.totalAttendance}</td>
                 <td>{formatCurrency(summary.totalCollected)}</td>
+                <td>{formatCurrency(summary.totalBanked)}</td>
+                <td>{formatCurrency(summary.totalUnBanked)}</td>
                 <td colSpan="3"></td>
               </tr>
               <tr>

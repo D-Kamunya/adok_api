@@ -19,8 +19,8 @@ echo "Uploading project to $DIGITAL_OCEAN_IP_ADDRESS..."
 rsync -avz ./project.tar root@$DIGITAL_OCEAN_IP_ADDRESS:/tmp/project.tar
 
 echo "Uploading env files..."
-rsync -avz .envs root@$DIGITAL_OCEAN_IP_ADDRESS:/tmp/.envs
-rsync -avz .client/.env root@$DIGITAL_OCEAN_IP_ADDRESS:/tmp/.envs/client.env
+rsync -avz .envs/ root@$DIGITAL_OCEAN_IP_ADDRESS:/tmp/.envs/
+rsync -avz ./client/.env root@$DIGITAL_OCEAN_IP_ADDRESS:/tmp/.envs/client.env
 # 🚀 Connect to server and deploy
 ssh -o StrictHostKeyChecking=no root@$DIGITAL_OCEAN_IP_ADDRESS <<'ENDSSH'
 
@@ -40,7 +40,7 @@ echo "Extracting to $TEMP_DIR..."
 tar -xf /tmp/project.tar -C "$TEMP_DIR"
 
 rsync -av --exclude='client.env' /tmp/.envs/ "$TEMP_DIR/.envs/"
-mv /tmp/.envs/client.env ./client/.env
+rsync -av /tmp/.envs/client.env "$TEMP_DIR/client/.env"
 
 cd "$TEMP_DIR"
 
