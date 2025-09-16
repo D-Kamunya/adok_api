@@ -63,7 +63,12 @@ class WorkbookUploadView(APIView):
             # Process each sheet
             for sheet_name in wb.sheetnames:
                 try:
-                    sheet_date = datetime.datetime.strptime(sheet_name, '%d-%m-%y').date()
+                    # Extract archname
+                    arch_name = sheet_name.rsplit('-', 3)[0].strip().upper()
+
+                    # Extract date part and convert to date object
+                    date_part = '-'.join(sheet_name.rsplit('-', 3)[1:])
+                    sheet_date = datetime.datetime.strptime(date_part, '%d-%m-%y').date()
                 except ValueError:
                     file_summary['errors'].append(f"Invalid sheet name format: '{sheet_name}'")
                     continue
@@ -71,22 +76,21 @@ class WorkbookUploadView(APIView):
                 ws = wb[sheet_name]
 
                 # Process each row
-                for idx, row in enumerate(ws.iter_rows(min_row=2), start=2):
+                for idx, row in enumerate(ws.iter_rows(min_row=8), start=8):
                     try:
-                        arch_name = (row[0].value or '').strip()
-                        parish_name = (row[1].value or '').strip()
-                        cong_name = (row[2].value or '').strip()
+                        parish_name = self.smart_title((row[0].value or '').strip())
+                        cong_name = self.smart_title((row[1].value or '').strip())
                         if not (arch_name and parish_name and cong_name):
                             continue
 
-                        ss = row[3].value or 0
-                        youth = row[4].value or 0
-                        adults = row[5].value or 0
-                        diff_abled = row[6].value or 0
-                        total_col = row[8].value or 0
-                        banked = row[9].value or 0
-                        unbanked = row[10].value or 0
-                        remarks = row[11].value or ''
+                        ss = row[2].value or 0
+                        youth = row[3].value or 0
+                        adults = row[4].value or 0
+                        diff_abled = row[5].value or 0
+                        total_col = row[7].value or 0
+                        banked = row[8].value or 0
+                        unbanked = total_col-banked or 0
+                        remarks = row[10].value or ''
 
                         arch, _ = Archdeaconry.objects.get_or_create(name=arch_name)
                         parish, _ = Parish.objects.get_or_create(name=parish_name, archdeaconry=arch)
@@ -110,6 +114,7 @@ class WorkbookUploadView(APIView):
                             }
                         )
 
+
                     except Exception as row_err:
                         file_summary['errors'].append(
                             f"Sheet '{sheet_name}', row {idx}: {str(row_err)}"
@@ -128,6 +133,23 @@ class WorkbookUploadView(APIView):
 
         return Response(summary, status=status.HTTP_200_OK)
 
+    def smart_title(self,name: str) -> str:
+        # Split on spaces for multi-word names
+        words = name.split()
+        fixed_words = []
+        for word in words:
+            if "'" in word:
+                # Capitalize first letter, keep rest lowercase except after apostrophe
+                parts = word.split("'")
+                parts[0] = parts[0].capitalize()
+                # Keep the part after apostrophe lowercase
+                parts[1:] = [p.lower() for p in parts[1:]]
+                fixed_words.append("'".join(parts))
+            else:
+                fixed_words.append(word.capitalize())
+        return " ".join(fixed_words)
+    
+    
 class DashboardAnalytics(APIView):
     def get(self, request):
         try:
