@@ -132,8 +132,8 @@ STATIC_URL = "/django_static/"
 STATIC_ROOT="/app/static"
 STATICFILES_DIRS = []
 
-MEDIA_URL = "/mediafiles/"
-MEDIA_ROOT = str(BASE_DIR / "mediafiles")
+MEDIA_URL = "/media/"
+MEDIA_ROOT = "/app/media"
 
 CORS_URLS_REGEX = r"^api/.*$"
 # Default primary key field type
