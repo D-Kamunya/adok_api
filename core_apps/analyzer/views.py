@@ -97,12 +97,12 @@ class WorkbookUploadView(APIView):
                         cong, _ = Congregation.objects.get_or_create(name=cong_name, parish=parish)
 
                         AttendanceRecord.objects.update_or_create(
-                            workbook=upload,
                             archdeaconry=arch,
                             parish=parish,
                             congregation=cong,
                             sunday_date=sheet_date,
                             defaults={
+                                'workbook': upload,
                                 'sunday_school': ss,
                                 'adults': adults,
                                 'diff_abled': diff_abled,
