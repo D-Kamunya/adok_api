@@ -135,7 +135,7 @@ class DashboardAnalytics(APIView):
             end_date_str = request.query_params.get('end_date')
 
             end_date = pd.to_datetime(end_date_str).date() if end_date_str else timezone.now().date()
-            start_date = pd.to_datetime(start_date_str).date() if start_date_str else (end_date - timedelta(days=365))
+            start_date = pd.to_datetime(start_date_str).date() if start_date_str else (end_date - timedelta(days=730))
 
             # Optional filters
             archdeaconry_id = request.query_params.get('archdeaconry')
