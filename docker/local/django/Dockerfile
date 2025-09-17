@@ -50,6 +50,14 @@ COPY --chown=django:django ./docker/local/django/start /start
 RUN sed -i 's/\r$//g' /entrypoint /start && \
     chmod +x /entrypoint /start
 
+RUN mkdir -p /app/static && \
+    chown -R django:django /app/static && \
+    chmod 775 /app/static
+
+RUN mkdir -p /app/media && \
+    chown -R django:django /app/media && \
+    chmod 775 /app/media
+
 COPY --chown=django:django . ${APP_HOME}
 
 USER django

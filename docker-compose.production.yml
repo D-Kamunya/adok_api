@@ -12,6 +12,8 @@ services:
         env_file:
             - ./.envs/.production/.django
             - ./.envs/.production/.postgres
+        environment:
+            - RUNNING_ENV=production
         depends_on:
             - postgres
         command: /start
@@ -30,6 +32,8 @@ services:
         env_file:
             - ./.envs/.production/.django
             - ./.envs/.production/.postgres
+        environment:
+            - RUNNING_ENV=production
         networks:
             - arch_prod_nw
     
@@ -43,6 +47,8 @@ services:
             - "443:443"
         env_file:
             - ./client/.env
+        environment:
+            - RUNNING_ENV=production
         volumes:
             # - ./docker/production/nginx/default.conf:/etc/nginx/nginx.conf:ro
             # - /etc/letsencrypt:/etc/letsencrypt:ro

@@ -5,7 +5,7 @@ services:
          dockerfile: ./docker/local/django/Dockerfile
       command: /start
       volumes:
-         - .:/app:z
+         # - .:/app:z
          - static_volume:/app/staticfiles
          - media_volume:/app/mediafiles
       expose:
@@ -15,6 +15,7 @@ services:
          - ./.envs/.local/.postgres
       environment:
          - RUNNING_IN_DOCKER=true
+         - RUNNING_ENV=local
       depends_on:
          - postgres
       networks:
@@ -31,6 +32,7 @@ services:
          - ./.envs/.local/.postgres
       environment:
          - RUNNING_IN_DOCKER=true
+         - RUNNING_ENV=local
       networks:
          - arch-api
 
@@ -42,6 +44,8 @@ services:
          - static_volume:/app/staticfiles
          - media_volume:/app/mediafiles
          - logs_store:/var/log/nginx
+      environment:
+         - RUNNING_ENV=local
       build:
          context: .
          dockerfile: ./docker/local/nginx/Dockerfile
