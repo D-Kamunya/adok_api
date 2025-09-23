@@ -43,7 +43,7 @@ services:
             dockerfile: ./docker/production/nginx/Dockerfile
         restart: always
         ports:
-            - "8080:80"
+            - "80:80"
             - "443:443"
         env_file:
             - ./client/.env
@@ -52,7 +52,7 @@ services:
         volumes:
             # - ./docker/production/nginx/default.conf:/etc/nginx/nginx.conf:ro
             # - /etc/letsencrypt:/etc/letsencrypt:ro
-            # - ./docker/production/nginx:/etc/nginx/conf.d
+            - ./docker/production/nginx:/etc/nginx/conf.d
             - ./docker/production/nginx/certbot/conf:/etc/letsencrypt
             - ./docker/production/nginx/certbot/www:/var/www/certbot
             - static_volume:/app/staticfiles
@@ -83,7 +83,3 @@ volumes:
     media_volume:
     app_logs:
     logs_store:
-    
-    
-    
-    
