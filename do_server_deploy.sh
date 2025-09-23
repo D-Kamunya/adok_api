@@ -5,7 +5,7 @@ set -e
 # 💡 UPDATE THESE
 DIGITAL_OCEAN_IP_ADDRESS="139.162.189.133"
 EMAIL="kinc.developer@gmail.com"
-DOMAINS=(dok.ackirinyaga.org www.dok.ackirinyaga.org)
+DOMAINS=(data-analyzer.ackirinyaga.org www.data-analyzer.ackirinyaga.org)
 RSA_KEY_SIZE=4096
 data_path="./docker/production/nginx/certbot"
 STAGING=1 # Set to 1 for testing, 0 for production    
@@ -62,13 +62,13 @@ docker compose -f docker-compose.production.yml up -d --build --remove-orphans
 echo "Setting up Certbot..."
 
 # EMAIL="kinc.developer@gmail.com"
-# DOMAINS=(dok.ackirinyaga.org www.dok.ackirinyaga.org)
+# DOMAINS=(data-analyzer.ackirinyaga.org www.data-analyzer.ackirinyaga.org)
 # RSA_KEY_SIZE=4096
 # STAGING=1
 
 DIGITAL_OCEAN_IP_ADDRESS="139.162.189.133"
 EMAIL="kinc.developer@gmail.com"
-DOMAINS=(dok.ackirinyaga.org www.dok.ackirinyaga.org)
+DOMAINS=(data-analyzer.ackirinyaga.org www.data-analyzer.ackirinyaga.org)
 RSA_KEY_SIZE=4096
 data_path="./docker/production/nginx/certbot"
 STAGING=1 # Set to 1 for testing, 0 for production
@@ -99,8 +99,8 @@ if [ "$STAGING" != "0" ]; then staging_arg="--staging"; fi
 
 # Dummy certs
 echo "Creating dummy certs for ${DOMAINS[@]}..."
-path="/etc/letsencrypt/live/dok.ackirinyaga.org"
-mkdir -p "$data_path/conf/live/dok.ackirinyaga.org"
+path="/etc/letsencrypt/live/data-analyzer.ackirinyaga.org"
+mkdir -p "$data_path/conf/live/data-analyzer.ackirinyaga.org"
 docker compose -f docker-compose.production.yml run --rm --entrypoint "\
   openssl req -x509 -nodes -newkey rsa:1024 -days 1 \
     -keyout '$path/privkey.pem' \
@@ -114,9 +114,9 @@ docker compose -f docker-compose.production.yml up --force-recreate -d nginx
 echo "Deleting dummy certs..."
 
 docker compose -f docker-compose.production.yml run --rm --entrypoint "\
-  rm -Rf /etc/letsencrypt/live/dok.ackirinyaga.org && \
-  rm -Rf /etc/letsencrypt/archive/dok.ackirinyaga.org && \
-  rm -Rf /etc/letsencrypt/renewal/dok.ackirinyaga.org.conf" certbot
+  rm -Rf /etc/letsencrypt/live/data-analyzer.ackirinyaga.org && \
+  rm -Rf /etc/letsencrypt/archive/data-analyzer.ackirinyaga.org && \
+  rm -Rf /etc/letsencrypt/renewal/data-analyzer.ackirinyaga.org.conf" certbot
 
 echo "Requesting Let's Encrypt certs..."
 
