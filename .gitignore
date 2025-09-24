@@ -189,4 +189,9 @@ client/npm-debug.log*
 client/yarn-debug.log*
 client/yarn-error.log*
 
-docker/production/nginx/certbot/
+# Ignore everything in certbot folder
+docker/production/nginx/certbot/*
+
+# But keep the renewal-hooks folder
+!docker/production/nginx/certbot/renewal-hooks/
+!docker/production/nginx/certbot/renewal-hooks/**

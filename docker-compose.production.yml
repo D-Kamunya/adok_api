@@ -69,7 +69,9 @@ services:
         volumes:
             - ./docker/production/nginx/certbot/conf:/etc/letsencrypt
             - ./docker/production/nginx/certbot/www:/var/www/certbot
-        entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"       
+            - ./docker/production/nginx/certbot/renewal-hooks:/etc/letsencrypt/renewal-hooks
+            - /var/run/docker.sock:/var/run/docker.sock
+        entrypoint: "/bin/sh -c 'chmod +x /etc/letsencrypt/renewal-hooks/deploy/* || true; trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done; '"
         networks:
             - arch_prod_nw
 
