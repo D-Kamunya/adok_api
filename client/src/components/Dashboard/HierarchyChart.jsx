@@ -4,7 +4,6 @@ import {
   Treemap,
   Tooltip
 } from 'recharts';
-import './HierarchyChart.css';
 
 const HierarchyChart = ({ data }) => {
   if (!data || !data.length) return null;
@@ -61,29 +60,35 @@ const HierarchyChart = ({ data }) => {
     const { name, value, collections } = payload[0].payload;
     
     return (
-      <div className="custom-tooltip">
-        <p className="label">{name}</p>
-        <p className="value">Attendance: {Math.round(value)}</p>
-        {collections && <p className="value">Collections: ${collections.toLocaleString()}</p>}
+      <div className="bg-white border rounded p-2 shadow-sm">
+        <p className="fw-bold mb-1">{name}</p>
+        <p className="mb-1 text-secondary">Attendance: {Math.round(value)}</p>
+        {collections && (
+          <p className="mb-0 text-secondary">
+            Collections: ${collections.toLocaleString()}
+          </p>
+        )}
       </div>
     );
   };
 
   return (
-    <div className="hierarchy-chart-container">
-      <h2>Hierarchical View</h2>
-      <div className="chart-wrapper">
-        <ResponsiveContainer width="100%" height={400}>
-          <Treemap
-            data={treeData}
-            dataKey="value"
-            aspectRatio={4/3}
-            stroke="#fff"
-            fill="#8884d8"
-          >
-            <Tooltip content={<CustomTooltip />} />
-          </Treemap>
-        </ResponsiveContainer>
+    <div className="card shadow-sm mb-4">
+      <div className="card-body">
+        <h2 className="h5 text-dark border-bottom pb-2 mb-3">Hierarchical View</h2>
+        <div style={{ height: 400 }}>
+          <ResponsiveContainer width="100%" height="100%">
+            <Treemap
+              data={treeData}
+              dataKey="value"
+              aspectRatio={4 / 3}
+              stroke="#fff"
+              fill="#8884d8"
+            >
+              <Tooltip content={<CustomTooltip />} />
+            </Treemap>
+          </ResponsiveContainer>
+        </div>
       </div>
     </div>
   );

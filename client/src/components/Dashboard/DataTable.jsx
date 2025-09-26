@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { fetchTableData } from '../../services/api';
-import './DataTable.css';
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 
@@ -229,22 +228,39 @@ const DataTable = ({ filters }) => {
   }
 
   return (
-    <div className="data-table-container">
-      <div className="table-header">
-        <h2>Attendance Records</h2>
-        <div className="table-actions">
-          <button onClick={() => exportToExcel(sortedData, false)}>
-            Download Current Page
-          </button>
-          <button onClick={() => exportToExcel(sortedAllData, true)}>
-            Download All Pages
-          </button>
+    <div className="card shadow-sm mb-4">
+      <div className="card-body">
+
+        {/* Header */}
+        <div className="d-flex flex-wrap justify-content-between align-items-center mb-3">
+          <h2 className="h5 mb-2 mb-md-0">Attendance Records</h2>
+
+          <div className="d-flex flex-wrap gap-2">
+            <button
+              className="btn btn-outline-primary btn-sm"
+              onClick={() => exportToExcel(sortedData, false)}
+            >
+              Download Current Page
+            </button>
+            <button
+              className="btn btn-primary btn-sm"
+              onClick={() => exportToExcel(sortedAllData, true)}
+            >
+              Download All Pages
+            </button>
+          </div>
         </div>
-        <div className="pagination-controls">
-          <div className="page-size-selector">
-            <label htmlFor="pageSize">Rows per page:</label>
+
+        {/* Pagination controls top */}
+        <div className="d-flex flex-wrap justify-content-between align-items-center mb-3">
+          <div className="d-flex align-items-center gap-2">
+            <label htmlFor="pageSize" className="form-label mb-0">
+              Rows per page:
+            </label>
             <select
               id="pageSize"
+              className="form-select form-select-sm"
+              style={{ width: "auto" }}
               value={pagination.pageSize}
               onChange={handlePageSizeChange}
               disabled={loading}
@@ -255,212 +271,230 @@ const DataTable = ({ filters }) => {
               <option value={100}>100</option>
             </select>
           </div>
-          <div className="page-info">
-            Showing {((pagination.currentPage - 1) * pagination.pageSize) + 1}-
-            {Math.min(pagination.currentPage * pagination.pageSize, pagination.totalRecords)} of {pagination.totalRecords}
+          <div className="text-muted small">
+            Showing {((pagination.currentPage - 1) * pagination.pageSize) + 1}–
+            {Math.min(pagination.currentPage * pagination.pageSize, pagination.totalRecords)} of{" "}
+            {pagination.totalRecords}
           </div>
         </div>
-      </div>
-      
-      <div className="table-responsive">
-        <table className="data-table">
-          {/* Table header remains the same */}
-          <thead>
-            <tr>
-              <th onClick={() => handleSort('sunday_date')}>
-                Date {sortConfig.key === 'sunday_date' && (
-                  sortConfig.direction === 'ascending' ? '↑' : '↓'
-                )}
-              </th>
-              <th>Archdeaconry</th>
-              <th>Parish</th>
-              <th>Congregation</th>
-              <th onClick={() => handleSort('sunday_school')}>
-                Sunday School {sortConfig.key === 'sunday_school' && (
-                  sortConfig.direction === 'ascending' ? '↑' : '↓'
-                )}
-              </th>
-              <th onClick={() => handleSort('adults')}>
-                Adults {sortConfig.key === 'adults' && (
-                  sortConfig.direction === 'ascending' ? '↑' : '↓'
-                )}
-              </th>
-              <th onClick={() => handleSort('youth')}>
-                Youth {sortConfig.key === 'youth' && (
-                  sortConfig.direction === 'ascending' ? '↑' : '↓'
-                )}
-              </th>
-              <th onClick={() => handleSort('diff_abled')}>
-                Diff. Abled {sortConfig.key === 'diff_abled' && (
-                  sortConfig.direction === 'ascending' ? '↑' : '↓'
-                )}
-              </th>
-              <th onClick={() => handleSort('total_attendance')}>
-                Total Attendance{sortConfig.key === 'total_attendance' && (
-                  sortConfig.direction === 'ascending' ? '↑' : '↓'
-                )}
-              </th>
-              <th onClick={() => handleSort('total_collection')}>
-                Total Collected {sortConfig.key === 'total_collection' && (
-                  sortConfig.direction === 'ascending' ? '↑' : '↓'
-                )}
-              </th>
-              <th onClick={() => handleSort('banked')}>
-                Total Banked {sortConfig.key === 'banked' && (
-                  sortConfig.direction === 'ascending' ? '↑' : '↓'
-                )}
-              </th>
-              <th onClick={() => handleSort('unbanked')}>
-                Total Unbanked
-                {sortConfig.key === 'unbanked' && (
-                  sortConfig.direction === 'ascending' ? '↑' : '↓'
-                )}
-              </th>
-              <th>Remarks</th>
-            </tr>
-          </thead>
-          
-          {/* Table body remains the same */}
-          <tbody>
-            {sortedData.map((record) => (
-              <React.Fragment key={record.id}>
-                <tr onClick={() => toggleRowExpand(record.id)} className="expandable-row">
-                  <td>{formatDate(record.sunday_date)}</td>
-                  <td>{record.archdeaconry_name}</td>
-                  <td>{record.parish_name}</td>
-                  <td>{record.congregation_name}</td>
-                  <td>{record.sunday_school}</td>
-                  <td>{record.adults}</td>
-                  <td>{record.youth}</td>
-                  <td>{record.diff_abled}</td>
-                  <td>{record.total_attendance}</td>
-                  <td>{formatCurrency(record.total_collection)}</td>
-                  <td>{formatCurrency(record.banked)}</td>
-                  <td>{formatCurrency(record.unbanked)}</td>
-                  <td>{record.remarks}</td>
-                </tr>
-                {expandedRows.includes(record.id) && (
-                  <tr className="expanded-details">
-                    <td colSpan="12">
-                      <div className="details-content">
-                        <div className="detail-item">
-                          <span className="detail-label">Date:</span>
-                          <span>{formatDate(record.sunday_date)}</span>
-                        </div>
-                        <div className="detail-item">
-                          <span className="detail-label">Location:</span>
-                          <span>{record.archdeaconry_name} → {record.parish_name} → {record.congregation_name}</span>
-                        </div>
-                        <div className="detail-item">
-                          <span className="detail-label">Attendance Breakdown:</span>
-                          <div className="breakdown">
-                            <span>Sunday School: {record.sunday_school}</span>
-                            <span>Adults: {record.adults}</span>
-                            <span>Youth: {record.youth}</span>
-                            <span>Diff. Abled: {record.diff_abled}</span>
-                            <span className="total">Total: {record.total_attendance}</span>
-                          </div>
-                        </div>
-                        <div className="detail-item">
-                          <span className="detail-label">Financials:</span>
-                          <div className="breakdown">
-                            <span>Collected: {formatCurrency(record.total_collection)}</span>
-                            <span>Banked: {formatCurrency(record.banked)}</span>
-                            <span>Unbanked: {formatCurrency(record.unbanked)}</span>
-                          </div>
-                        </div>
-                      </div>
-                    </td>
+
+        {/* Table */}
+        <div className="table-responsive">
+          <table className="table table-hover table-bordered align-middle">
+            <thead className="table-light">
+              <tr>
+                <th onClick={() => handleSort('sunday_date')}>
+                  Date {sortConfig.key === 'sunday_date' && (
+                    sortConfig.direction === 'ascending' ? '↑' : '↓'
+                  )}
+                </th>
+                <th>Archdeaconry</th>
+                <th>Parish</th>
+                <th>Congregation</th>
+                <th onClick={() => handleSort('sunday_school')}>
+                  Sunday School {sortConfig.key === 'sunday_school' && (
+                    sortConfig.direction === 'ascending' ? '↑' : '↓'
+                  )}
+                </th>
+                <th onClick={() => handleSort('adults')}>
+                  Adults {sortConfig.key === 'adults' && (
+                    sortConfig.direction === 'ascending' ? '↑' : '↓'
+                  )}
+                </th>
+                <th onClick={() => handleSort('youth')}>
+                  Youth {sortConfig.key === 'youth' && (
+                    sortConfig.direction === 'ascending' ? '↑' : '↓'
+                  )}
+                </th>
+                <th onClick={() => handleSort('diff_abled')}>
+                  Diff. Abled {sortConfig.key === 'diff_abled' && (
+                    sortConfig.direction === 'ascending' ? '↑' : '↓'
+                  )}
+                </th>
+                <th onClick={() => handleSort('total_attendance')}>
+                  Total Attendance {sortConfig.key === 'total_attendance' && (
+                    sortConfig.direction === 'ascending' ? '↑' : '↓'
+                  )}
+                </th>
+                <th onClick={() => handleSort('total_collection')}>
+                  Total Collected {sortConfig.key === 'total_collection' && (
+                    sortConfig.direction === 'ascending' ? '↑' : '↓'
+                  )}
+                </th>
+                <th onClick={() => handleSort('banked')}>
+                  Total Banked {sortConfig.key === 'banked' && (
+                    sortConfig.direction === 'ascending' ? '↑' : '↓'
+                  )}
+                </th>
+                <th onClick={() => handleSort('unbanked')}>
+                  Total Unbanked {sortConfig.key === 'unbanked' && (
+                    sortConfig.direction === 'ascending' ? '↑' : '↓'
+                  )}
+                </th>
+                <th>Remarks</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {sortedData.map((record) => (
+                <React.Fragment key={record.id}>
+                  <tr
+                    onClick={() => toggleRowExpand(record.id)}
+                    className="cursor-pointer"
+                  >
+                    <td>{formatDate(record.sunday_date)}</td>
+                    <td>{record.archdeaconry_name}</td>
+                    <td>{record.parish_name}</td>
+                    <td>{record.congregation_name}</td>
+                    <td>{record.sunday_school}</td>
+                    <td>{record.adults}</td>
+                    <td>{record.youth}</td>
+                    <td>{record.diff_abled}</td>
+                    <td>{record.total_attendance}</td>
+                    <td>{formatCurrency(record.total_collection)}</td>
+                    <td>{formatCurrency(record.banked)}</td>
+                    <td>{formatCurrency(record.unbanked)}</td>
+                    <td>{record.remarks}</td>
                   </tr>
-                )}
-              </React.Fragment>
-            ))}
-          </tbody>
-          
-          {/* Table footer remains the same */}
-          {summary && (
-            <tfoot>
-              <tr>
-                <td colSpan="4" className="summary-label">Totals:</td>
-                <td>{summary.totalSundaySchool}</td>
-                <td>{summary.totalAdults}</td>
-                <td>{summary.totalYouth}</td>
-                <td>{summary.totalDisabled}</td>
-                <td>{summary.totalAttendance}</td>
-                <td>{formatCurrency(summary.totalCollected)}</td>
-                <td>{formatCurrency(summary.totalBanked)}</td>
-                <td>{formatCurrency(summary.totalUnBanked)}</td>
-                <td colSpan="3"></td>
-              </tr>
-              <tr>
-                <td colSpan="4" className="summary-label">Averages:</td>
-                <td>{Math.round(summary.totalSundaySchool / data.length)}</td>
-                <td>{Math.round(summary.totalAdults / data.length)}</td>
-                <td>{Math.round(summary.totalYouth / data.length)}</td>
-                <td>{Math.round(summary.totalDisabled / data.length)}</td>
-                <td>{Math.round(summary.avgAttendance)}</td>
-                <td>{formatCurrency(summary.avgCollection)}</td>
-                <td colSpan="3"></td>
-              </tr>
-            </tfoot>
-          )}
-        </table>
-      </div>
-      
-      {/* Pagination controls */}
-      <div className="pagination">
-        <button
-          onClick={() => handlePageChange(1)}
-          disabled={pagination.currentPage === 1 || loading}
-        >
-          « First
-        </button>
-        <button
-          onClick={() => handlePageChange(pagination.currentPage - 1)}
-          disabled={pagination.currentPage === 1 || loading}
-        >
-          ‹ Previous
-        </button>
-        
-        {/* Page numbers */}
-        {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-          let pageNum;
-          if (totalPages <= 5) {
-            pageNum = i + 1;
-          } else if (pagination.currentPage <= 3) {
-            pageNum = i + 1;
-          } else if (pagination.currentPage >= totalPages - 2) {
-            pageNum = totalPages - 4 + i;
-          } else {
-            pageNum = pagination.currentPage - 2 + i;
-          }
-          
-          return (
-            <button
-              key={pageNum}
-              onClick={() => handlePageChange(pageNum)}
-              className={pagination.currentPage === pageNum ? 'active' : ''}
-              disabled={loading}
-            >
-              {pageNum}
-            </button>
-          );
-        })}
-        
-        <button
-          onClick={() => handlePageChange(pagination.currentPage + 1)}
-          disabled={pagination.currentPage === totalPages || loading}
-        >
-          Next ›
-        </button>
-        <button
-          onClick={() => handlePageChange(totalPages)}
-          disabled={pagination.currentPage === totalPages || loading}
-        >
-          Last »
-        </button>
+
+                  {expandedRows.includes(record.id) && (
+                    <tr className="table-secondary">
+                      <td colSpan="13">
+                        <div className="row g-3">
+                          <div className="col-md-6">
+                            <strong>Date:</strong> {formatDate(record.sunday_date)}
+                          </div>
+                          <div className="col-md-6">
+                            <strong>Location:</strong> {record.archdeaconry_name} → {record.parish_name} → {record.congregation_name}
+                          </div>
+                          <div className="col-md-6">
+                            <strong>Attendance Breakdown:</strong>
+                            <ul className="list-unstyled small mb-0">
+                              <li>Sunday School: {record.sunday_school}</li>
+                              <li>Adults: {record.adults}</li>
+                              <li>Youth: {record.youth}</li>
+                              <li>Diff. Abled: {record.diff_abled}</li>
+                              <li className="fw-bold">Total: {record.total_attendance}</li>
+                            </ul>
+                          </div>
+                          <div className="col-md-6">
+                            <strong>Financials:</strong>
+                            <ul className="list-unstyled small mb-0">
+                              <li>Collected: {formatCurrency(record.total_collection)}</li>
+                              <li>Banked: {formatCurrency(record.banked)}</li>
+                              <li>Unbanked: {formatCurrency(record.unbanked)}</li>
+                            </ul>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  )}
+                </React.Fragment>
+              ))}
+            </tbody>
+
+            {summary && (
+              <tfoot className="table-light">
+                <tr>
+                  <td colSpan="4" className="fw-bold">Totals:</td>
+                  <td>{summary.totalSundaySchool}</td>
+                  <td>{summary.totalAdults}</td>
+                  <td>{summary.totalYouth}</td>
+                  <td>{summary.totalDisabled}</td>
+                  <td>{summary.totalAttendance}</td>
+                  <td>{formatCurrency(summary.totalCollected)}</td>
+                  <td>{formatCurrency(summary.totalBanked)}</td>
+                  <td>{formatCurrency(summary.totalUnBanked)}</td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td colSpan="4" className="fw-bold">Averages:</td>
+                  <td>{Math.round(summary.totalSundaySchool / data.length)}</td>
+                  <td>{Math.round(summary.totalAdults / data.length)}</td>
+                  <td>{Math.round(summary.totalYouth / data.length)}</td>
+                  <td>{Math.round(summary.totalDisabled / data.length)}</td>
+                  <td>{Math.round(summary.avgAttendance)}</td>
+                  <td>{formatCurrency(summary.avgCollection)}</td>
+                  <td colSpan="3"></td>
+                </tr>
+              </tfoot>
+            )}
+          </table>
+        </div>
+
+        {/* Pagination */}
+        <nav className="mt-3">
+          <ul className="pagination justify-content-center flex-wrap">
+            <li className={`page-item ${pagination.currentPage === 1 ? 'disabled' : ''}`}>
+              <button
+                className="page-link"
+                onClick={() => handlePageChange(1)}
+                disabled={pagination.currentPage === 1 || loading}
+              >
+                « First
+              </button>
+            </li>
+            <li className={`page-item ${pagination.currentPage === 1 ? 'disabled' : ''}`}>
+              <button
+                className="page-link"
+                onClick={() => handlePageChange(pagination.currentPage - 1)}
+                disabled={pagination.currentPage === 1 || loading}
+              >
+                ‹ Previous
+              </button>
+            </li>
+
+            {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+              let pageNum;
+              if (totalPages <= 5) {
+                pageNum = i + 1;
+              } else if (pagination.currentPage <= 3) {
+                pageNum = i + 1;
+              } else if (pagination.currentPage >= totalPages - 2) {
+                pageNum = totalPages - 4 + i;
+              } else {
+                pageNum = pagination.currentPage - 2 + i;
+              }
+
+              return (
+                <li
+                  key={pageNum}
+                  className={`page-item ${pagination.currentPage === pageNum ? 'active' : ''}`}
+                >
+                  <button
+                    className="page-link"
+                    onClick={() => handlePageChange(pageNum)}
+                    disabled={loading}
+                  >
+                    {pageNum}
+                  </button>
+                </li>
+              );
+            })}
+
+            <li className={`page-item ${pagination.currentPage === totalPages ? 'disabled' : ''}`}>
+              <button
+                className="page-link"
+                onClick={() => handlePageChange(pagination.currentPage + 1)}
+                disabled={pagination.currentPage === totalPages || loading}
+              >
+                Next ›
+              </button>
+            </li>
+            <li className={`page-item ${pagination.currentPage === totalPages ? 'disabled' : ''}`}>
+              <button
+                className="page-link"
+                onClick={() => handlePageChange(totalPages)}
+                disabled={pagination.currentPage === totalPages || loading}
+              >
+                Last »
+              </button>
+            </li>
+          </ul>
+        </nav>
       </div>
     </div>
+
   );
 };
 

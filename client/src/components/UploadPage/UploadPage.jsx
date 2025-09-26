@@ -2,7 +2,6 @@ import React, { useState, useRef } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import './UploadPage.css';
 
 const UploadPage = () => {
     const [files, setFiles] = useState([]);
@@ -95,16 +94,20 @@ const UploadPage = () => {
 
             if (errors && errors.length) {
                 toast.error(
-                <div className="toast-body-overflow">
-                    <strong>{file}</strong><br/>
-                    {errors.map((err, i) => <div key={i}>• {err}</div>)}
+                <div className="alert alert-danger mb-0">
+                    <strong>{file}</strong>
+                    <ul className="mb-0">
+                    {errors.map((err, i) => (
+                        <li key={i}>{err}</li>
+                    ))}
+                    </ul>
                 </div>,
                 { autoClose: false }
                 );
             } else {
                 toast.success(
-                <div className="toast-body-overflow">
-                    {file} {new_upload ? 'uploaded' : 're-uploaded'} successfully.`
+                <div className="alert alert-success mb-0">
+                    {file} {new_upload ? "uploaded" : "re-uploaded"} successfully.
                 </div>,
                 { autoClose: false }
                 );
@@ -113,7 +116,7 @@ const UploadPage = () => {
         } catch (error) {
             console.error('Upload error:', error);
             toast.error(
-                <div className="toast-body-overflow">
+                 <div className="alert alert-danger mb-0">
                     Upload failed: {error.message}
                 </div>, { autoClose: false });
         } finally {
@@ -127,89 +130,99 @@ const UploadPage = () => {
     };
 
     return (
-        <div className="upload-page">
-            <div className="upload-container">
-                <h1>Upload Attendance Data</h1>
-                <p className="instructions">
-                Upload Excel files containing church attendance data. Supported formats: .xls, .xlsx.
-                Files should contain columns: Archdeaconry, Parish, Congregation, Sunday School, Adults, Youth, Disabled, Collected, Banked, Unbank, Sunday Date.
+        <div className="container py-5">
+            <div className="card shadow-sm">
+                <div className="card-body">
+                <h1 className="h4 text-center mb-3">Upload Attendance Data</h1>
+                <p className="text-muted text-center">
+                    Upload Excel files containing church attendance data. Supported
+                    formats: <code>.xls</code>, <code>.xlsx</code>. Required columns:
+                    Archdeaconry, Parish, Congregation, Sunday School, Adults, Youth,
+                    Disabled, Collected, Banked, Unbank, Sunday Date.
                 </p>
-                
-                <div 
-                className={`drop-area ${isDragging ? 'dragging' : ''}`}
-                onDragOver={handleDragOver}
-                onDragLeave={handleDragLeave}
-                onDrop={handleDrop}
-                onClick={triggerFileInput}
+
+                {/* Drop Zone */}
+                <div
+                    className={`border border-2 rounded p-5 text-center mb-4 ${
+                    isDragging ? "border-success bg-light" : "border-primary bg-light"
+                    }`}
+                    onDragOver={handleDragOver}
+                    onDragLeave={handleDragLeave}
+                    onDrop={handleDrop}
+                    onClick={triggerFileInput}
+                    style={{ cursor: "pointer" }}
                 >
-                <div className="drop-content">
-                    <input 
-                    type="file" 
+                    <input
+                    type="file"
                     ref={fileInputRef}
-                    onChange={handleFileChange} 
-                    multiple 
-                    accept=".xls,.xlsx,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-                    style={{ display: 'none' }}
+                    onChange={handleFileChange}
+                    multiple
+                    accept=".xls,.xlsx"
+                    hidden
                     />
-                    <div className="upload-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                        <polyline points="17 8 12 3 7 8"></polyline>
-                        <line x1="12" y1="3" x2="12" y2="15"></line>
-                    </svg>
+                    <div className="mb-2 text-primary">
+                    <i className="bi bi-cloud-upload display-5"></i>
                     </div>
-                    <p className="drop-text">
-                    {isDragging ? 'Drop files here' : 'Click or drag files to upload'}
+                    <p className="fw-semibold mb-1">
+                    {isDragging ? "Drop files here" : "Click or drag files to upload"}
                     </p>
-                    <p className="drop-subtext">Supports multiple Excel files (.xls, .xlsx)</p>
+                    <small className="text-muted">
+                    Supports multiple Excel files (.xls, .xlsx)
+                    </small>
                 </div>
-                </div>
-                
+
+                {/* File List */}
                 {files.length > 0 && (
-                <div className="file-list">
-                    <h3>Selected Files ({files.length})</h3>
-                    <ul>
-                    {files.map((file, index) => (
-                        <li key={index} className="file-item">
-                        <div className="file-info">
-                            <span className="file-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
-                                <polyline points="13 2 13 9 20 9"></polyline>
-                            </svg>
-                            </span>
-                            <span className="file-name">{file.name}</span>
-                            <span className="file-size">({formatFileSize(file.size)})</span>
-                        </div>
-                        <button 
-                            className="remove-btn"
+                    <div className="mb-4">
+                    <h5>Selected Files ({files.length})</h5>
+                    <ul className="list-group">
+                        {files.map((file, index) => (
+                        <li
+                            key={index}
+                            className="list-group-item d-flex justify-content-between align-items-center"
+                        >
+                            <div>
+                            <i className="bi bi-file-earmark-excel text-success me-2"></i>
+                            <strong>{file.name}</strong>{" "}
+                            <small className="text-muted">
+                                ({formatFileSize(file.size)})
+                            </small>
+                            </div>
+                            <button
+                            className="btn btn-sm btn-outline-danger"
                             onClick={() => removeFile(index)}
                             disabled={isUploading}
-                        >
-                            ×
-                        </button>
+                            >
+                            <i className="bi bi-x-lg"></i>
+                            </button>
                         </li>
-                    ))}
+                        ))}
                     </ul>
-                </div>
+                    </div>
                 )}
-                
-                <div className="upload-controls">
-                <button 
-                    className="upload-btn"
+
+                {/* Upload Controls */}
+                <div className="d-flex flex-column align-items-center">
+                    <button
+                    className="btn btn-primary px-4"
                     onClick={handleUpload}
                     disabled={isUploading || files.length === 0}
-                >
-                    {isUploading ? 'Uploading...' : 'Upload Files'}
-                </button>
-                
-                {isUploading && (
-                    <div className="progress-container">
-                    <div className="progress-bar" style={{ width: `${progress}%` }}>
-                        {progress > 5 ? `${progress}%` : ''}
+                    >
+                    {isUploading ? "Uploading..." : "Upload Files"}
+                    </button>
+
+                    {isUploading && (
+                    <div className="progress w-100 mt-3" style={{ height: "25px" }}>
+                        <div
+                        className="progress-bar progress-bar-striped progress-bar-animated bg-success"
+                        role="progressbar"
+                        style={{ width: `${progress}%` }}
+                        >
+                        {progress > 5 ? `${progress}%` : ""}
+                        </div>
                     </div>
-                    </div>
-                )}
+                    )}
+                </div>
                 </div>
             </div>
         </div>

@@ -1,11 +1,12 @@
 import React from 'react';
-import './Loader.css';
 
 const Loader = () => {
   return (
-    <div className="loader-container">
-      <div className="loader"></div>
-      <p>Loading data...</p>
+    <div className="d-flex flex-column align-items-center justify-content-center" style={{ height: "200px" }}>
+      <div className="spinner-border text-primary" role="status" style={{ width: "3rem", height: "3rem" }}>
+        <span className="visually-hidden">Loading...</span>
+      </div>
+      <p className="mt-3">Loading data...</p>
     </div>
   );
 };

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import './Navbar.css';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -10,58 +9,71 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="navbar">
-      <div className="navbar-container">
-        <div className="navbar-brand">
-          <NavLink to="/" className="logo-link">
-            Church Analytics
-          </NavLink>
-        </div>
+    <nav className="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm sticky-top">
+      <div className="container">
+        {/* Brand */}
+        <NavLink to="/" className="navbar-brand fw-bold">
+          Church Analytics
+        </NavLink>
 
-        <div className={`navbar-links ${isOpen ? 'open' : ''}`}>
-          <ul>
-            <li>
+        {/* Toggler */}
+        <button
+          className="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span className="navbar-toggler-icon"></span>
+        </button>
+
+        {/* Links */}
+        <div className="collapse navbar-collapse" id="navbarNav">
+          <ul className="navbar-nav ms-auto">
+            <li className="nav-item">
               <NavLink 
                 to="/" 
-                className={({ isActive }) => isActive ? 'active' : ''}
                 end
+                className={({ isActive }) => 
+                  isActive ? "nav-link active text-primary" : "nav-link"
+                }
               >
                 Dashboard
               </NavLink>
             </li>
-            <li>
+            <li className="nav-item">
               <NavLink 
                 to="/upload" 
-                className={({ isActive }) => isActive ? 'active' : ''}
+                className={({ isActive }) => 
+                  isActive ? "nav-link active text-primary" : "nav-link"
+                }
               >
                 Upload Data
               </NavLink>
             </li>
-            <li>
+            <li className="nav-item">
               <NavLink 
                 to="/reports" 
-                className={({ isActive }) => isActive ? 'active' : ''}
+                className={({ isActive }) => 
+                  isActive ? "nav-link active text-primary" : "nav-link"
+                }
               >
                 Reports
               </NavLink>
             </li>
-            <li>
+            <li className="nav-item">
               <NavLink 
                 to="/settings" 
-                className={({ isActive }) => isActive ? 'active' : ''}
+                className={({ isActive }) => 
+                  isActive ? "nav-link active text-primary" : "nav-link"
+                }
               >
                 Settings
               </NavLink>
             </li>
           </ul>
-        </div>
-
-        <div className="navbar-toggle" onClick={toggleMenu}>
-          <div className={`hamburger ${isOpen ? 'open' : ''}`}>
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
         </div>
       </div>
     </nav>

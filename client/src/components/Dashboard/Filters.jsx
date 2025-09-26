@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { fetchParishesByArchdeaconry, fetchCongregationsByParish,fetchArchdeaconries,fetchCongregationsByArchdeaconry } from '../../services/api';
 import { toast } from 'react-toastify';
-import './Filters.css';
 
 const Filters = ({ onFilterChange, initialFilters }) => {
   const [filters, setFilters] = useState(initialFilters);
@@ -122,70 +121,89 @@ const Filters = ({ onFilterChange, initialFilters }) => {
   };
 
   return (
-    <div className="filters-container">
-      <div className="filter-group">
-        <label htmlFor="archdeaconry">Archdeaconry:</label>
-        <select
-          id="archdeaconry"
-          name="archdeaconry"
-          value={filters.archdeaconry || ''}
-          onChange={handleArchdeaconryChange}
-          disabled={loading.archdeaconries}
-        >
-          <option value="">All Archdeaconries</option>
-          {archdeaconries.map(arch => (
-            <option key={arch.id} value={arch.id}>{arch.name}</option>
-          ))}
-        </select>
-      </div>
-
-      <div className="filter-group">
-        <label htmlFor="parish">Parish:</label>
-        <select
-          id="parish"
-          name="parish"
-          value={filters.parish || ''}
-          onChange={handleParishChange}
-          disabled={loading.parishes || !filters.archdeaconry}
-        >
-          <option value="">All Parishes</option>
-          {parishes.map(parish => (
-            <option key={parish.id} value={parish.id}>{parish.name}</option>
-          ))}
-        </select>
-      </div>
-
-      <div className="filter-group">
-        <label htmlFor="congregation">Congregation:</label>
-        <select
-          id="congregation"
-          name="congregation"
-          value={filters.congregation || ''}
-          onChange={handleCongregationChange}
-          disabled={loading.congregations || (!filters.parish && !filters.archdeaconry)}
-        >
-          <option value="">All Congregations</option>
-          {congregations.map(cong => (
-            <option key={cong.id} value={cong.id}>{cong.name}</option>
-          ))}
-        </select>
-      </div>
-
-      <div className="filter-group">
-        <label>Date Range:</label>
-        <div className="date-range">
-          <input
-            type="date"
-            value={filters.start_date || ''}
-            onChange={(e) => handleDateChange('start_date', e.target.value)}
-          />
-          <span>to</span>
-          <input
-            type="date"
-            value={filters.end_date || ''}
-            onChange={(e) => handleDateChange('end_date', e.target.value)}
-          />
+    <div className="container-fluid bg-light rounded p-3 mb-4">
+      <div className="row g-3">
+        
+        {/* Archdeaconry */}
+        <div className="col-md-3">
+          <label htmlFor="archdeaconry" className="form-label fw-semibold">
+            Archdeaconry:
+          </label>
+          <select
+            id="archdeaconry"
+            name="archdeaconry"
+            className="form-select"
+            value={filters.archdeaconry || ''}
+            onChange={handleArchdeaconryChange}
+            disabled={loading.archdeaconries}
+          >
+            <option value="">All Archdeaconries</option>
+            {archdeaconries.map(arch => (
+              <option key={arch.id} value={arch.id}>{arch.name}</option>
+            ))}
+          </select>
         </div>
+
+        {/* Parish */}
+        <div className="col-md-3">
+          <label htmlFor="parish" className="form-label fw-semibold">
+            Parish:
+          </label>
+          <select
+            id="parish"
+            name="parish"
+            className="form-select"
+            value={filters.parish || ''}
+            onChange={handleParishChange}
+            disabled={loading.parishes || !filters.archdeaconry}
+          >
+            <option value="">All Parishes</option>
+            {parishes.map(parish => (
+              <option key={parish.id} value={parish.id}>{parish.name}</option>
+            ))}
+          </select>
+        </div>
+
+        {/* Congregation */}
+        <div className="col-md-3">
+          <label htmlFor="congregation" className="form-label fw-semibold">
+            Congregation:
+          </label>
+          <select
+            id="congregation"
+            name="congregation"
+            className="form-select"
+            value={filters.congregation || ''}
+            onChange={handleCongregationChange}
+            disabled={loading.congregations || (!filters.parish && !filters.archdeaconry)}
+          >
+            <option value="">All Congregations</option>
+            {congregations.map(cong => (
+              <option key={cong.id} value={cong.id}>{cong.name}</option>
+            ))}
+          </select>
+        </div>
+
+        {/* Date Range */}
+        <div className="col-md-3">
+          <label className="form-label fw-semibold">Date Range:</label>
+          <div className="d-flex align-items-center gap-2 flex-wrap">
+            <input
+              type="date"
+              className="form-control"
+              value={filters.start_date || ''}
+              onChange={(e) => handleDateChange('start_date', e.target.value)}
+            />
+            <span className="text-muted">to</span>
+            <input
+              type="date"
+              className="form-control"
+              value={filters.end_date || ''}
+              onChange={(e) => handleDateChange('end_date', e.target.value)}
+            />
+          </div>
+        </div>
+
       </div>
     </div>
   );

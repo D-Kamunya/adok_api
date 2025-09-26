@@ -4,15 +4,20 @@ import { ToastContainer } from 'react-toastify';
 import Navbar from './components/Navbar/Navbar';
 import UploadPage from './components/UploadPage/UploadPage'
 import Dashboard from './components/Dashboard/Dashboard';
-import './App.css';
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
-    <Router>
-      <div className="app">
+     <Router>
+      <div className="d-flex flex-column min-vh-100 bg-light">
+        {/* Toast container */}
         <ToastContainer autoClose={false} />
-        <Navbar/>
-        <main className="main-content">
+
+        {/* Navbar */}
+        <Navbar />
+
+        {/* Main content */}
+        <main className="flex-grow-1 container py-4">
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/dashboard" element={<Dashboard />} />
