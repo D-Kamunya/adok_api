@@ -1,9 +1,12 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { fetchTableData } from '../../services/api';
 import './DataTable.css';
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
 
 const DataTable = ({ filters }) => {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState([]);       // current page data
+  const [allData, setAllData] = useState([]); // full filtered dataset
   const [loading, setLoading] = useState(true);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: 'ascending' });
   const [expandedRows, setExpandedRows] = useState([]);
@@ -13,6 +16,7 @@ const DataTable = ({ filters }) => {
     totalRecords: 0
   });
 
+  // Load current page
   useEffect(() => {
     const loadData = async () => {
       try {
@@ -33,6 +37,23 @@ const DataTable = ({ filters }) => {
     
     loadData();
   }, [filters, pagination.currentPage, pagination.pageSize]);
+
+  // Load all filtered data for full export
+  useEffect(() => {
+    const loadAllData = async () => {
+      try {
+        const { data: tableData } = await fetchTableData({
+          ...filters,
+          page: 1,
+          pageSize: 1000000 // large number to fetch all
+        });
+        setAllData(tableData);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    loadAllData();
+  }, [filters]);
 
   const handleSort = (key) => {
     let direction = 'ascending';
@@ -55,6 +76,15 @@ const DataTable = ({ filters }) => {
       return 0;
     });
   }, [data, sortConfig]);
+
+  const sortedAllData = useMemo(() => {
+    if (!sortConfig.key) return allData;
+    return [...allData].sort((a, b) => {
+      if (a[sortConfig.key] < b[sortConfig.key]) return sortConfig.direction === 'ascending' ? -1 : 1;
+      if (a[sortConfig.key] > b[sortConfig.key]) return sortConfig.direction === 'ascending' ? 1 : -1;
+      return 0;
+    });
+  }, [allData, sortConfig]);
 
   const toggleRowExpand = (id) => {
     if (expandedRows.includes(id)) {
@@ -105,6 +135,88 @@ const DataTable = ({ filters }) => {
     }).format(amount);
   };
 
+  // -----------------------------
+  // Excel Export Functions
+  // -----------------------------
+  
+  const exportToExcel = (exportData, isAllPages = false) => {
+    const archSelect = document.getElementById("archdeaconry");
+    const archName = archSelect.options[archSelect.selectedIndex].text; 
+    const parishSelect = document.getElementById("parish");
+    const parishName = parishSelect.options[parishSelect.selectedIndex].text; 
+    const congSelect = document.getElementById("congregation");
+    const congName = congSelect.options[congSelect.selectedIndex].text; 
+    
+    if (!exportData.length) return;
+
+     // Build descriptive title
+    const title = `ATTENDANCE AND COLLECTION DATA FOR ARCHDEACONRY-${archName} PARISH-${parishName} CONGREGATION-${congName} FROM-${formatDate(filters?.start_date || "JAN 2024")} TO-${formatDate(filters?.end_date || new Date())}${isAllPages ? "(ALL PAGES)" : `(PAGE ${pagination.currentPage})`}`;
+
+    const excelData = exportData.map(record => ({
+      "Date": formatDate(record.sunday_date),
+      "Archdeaconry": record.archdeaconry_name,
+      "Parish": record.parish_name,
+      "Congregation": record.congregation_name,
+      "Sunday School": record.sunday_school,
+      "Adults": record.adults,
+      "Youth": record.youth,
+      "Diff Abled": record.diff_abled,
+      "Total Attendance": record.total_attendance,
+      "Total Collected": record.total_collection,
+      "Total Banked": record.banked,
+      "Total Unbanked": record.unbanked,
+      "Remarks": record.remarks
+    }));
+
+    // 🔑 Calculate totals & averages for ALL exportData (not just page data)
+    const totals = {
+      "Date": "SUMMARY",
+      "Archdeaconry": "",
+      "Parish": "",
+      "Congregation": "",
+      "Sunday School": exportData.reduce((sum, r) => sum + (r.sunday_school || 0), 0),
+      "Adults": exportData.reduce((sum, r) => sum + (r.adults || 0), 0),
+      "Youth": exportData.reduce((sum, r) => sum + (r.youth || 0), 0),
+      "Diff Abled": exportData.reduce((sum, r) => sum + (r.diff_abled || 0), 0),
+      "Total Attendance": exportData.reduce((sum, r) => sum + (r.total_attendance || 0), 0),
+      "Total Collected": exportData.reduce((sum, r) => sum + (r.total_collection || 0), 0),
+      "Total Banked": exportData.reduce((sum, r) => sum + (r.banked || 0), 0),
+      "Total Unbanked": exportData.reduce((sum, r) => sum + (r.unbanked || 0), 0),
+      "Remarks": `Avg Attendance: ${
+        Math.round(exportData.reduce((s, r) => s + (r.total_attendance || 0), 0) / exportData.length)
+      }, Avg Collection: ${
+        Math.round(exportData.reduce((s, r) => s + (r.total_collection || 0), 0) / exportData.length)
+      }`
+    };
+
+
+    excelData.push(totals);
+
+    // Convert JSON to sheet
+    const ws = XLSX.utils.json_to_sheet(excelData, { origin: "A2" }); // start after headers
+
+    // Insert header rows manually
+    XLSX.utils.sheet_add_aoa(ws, [[title.toUpperCase()]], { origin: "A1" });
+
+     // Merge across all header columns (A1 through last column)
+    const range = XLSX.utils.decode_range(ws["!ref"]);
+    ws["!merges"] = ws["!merges"] || [];
+    ws["!merges"].push({
+      s: { r: 0, c: 0 },              // start row 0 col 0 (A1)
+      e: { r: 0, c: range.e.c },      // end row 0 last column
+    });
+
+    // Generate filename
+    const fname = `ARCHDEACONRY_${archName}_PARISH_${parishName}_CONGREGATION_${congName}_${formatDate(filters?.start_date || "JAN 2024")}_${formatDate(filters?.end_date || new Date())}.xlsx`;
+    
+    // Create workbook and export
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Attendance");
+    const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+    const dataBlob = new Blob([excelBuffer], { type: "application/octet-stream" });
+    saveAs(dataBlob, fname.toUpperCase());
+  };
+
   // Calculate total pages
   const totalPages = Math.ceil(pagination.totalRecords / pagination.pageSize);
 
@@ -120,6 +232,14 @@ const DataTable = ({ filters }) => {
     <div className="data-table-container">
       <div className="table-header">
         <h2>Attendance Records</h2>
+        <div className="table-actions">
+          <button onClick={() => exportToExcel(sortedData, false)}>
+            Download Current Page
+          </button>
+          <button onClick={() => exportToExcel(sortedAllData, true)}>
+            Download All Pages
+          </button>
+        </div>
         <div className="pagination-controls">
           <div className="page-size-selector">
             <label htmlFor="pageSize">Rows per page:</label>
