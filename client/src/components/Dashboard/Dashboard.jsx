@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { fetchDashboardData } from '../../services/api';
 import Filters from './Filters';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import SummaryCards from './SummaryCards';
 import TimeSeriesChart from './TimeSeriesChart';
@@ -47,8 +47,6 @@ const Dashboard = () => {
 
   return (
     <div className="container my-4">
-      <ToastContainer position="top-right" autoClose={5000} />
-
       <h1 className="text-center text-dark mb-4">
         Church Attendance Analytics Dashboard
       </h1>
