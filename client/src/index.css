@@ -11,3 +11,15 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+
+.Toastify__toast .alert {
+  max-height: 6em;       /* limit height to ~3–4 lines */
+  overflow-y: auto;      /* scroll if content exceeds */
+  white-space: pre-wrap; /* preserve bullets and line breaks */
+  padding-right: 0.25em; /* space for scrollbar */
+}
+
+.Toastify__toast {
+  padding: 0.5em 1em;
+}
